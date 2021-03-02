@@ -151,7 +151,6 @@
                     this.Destination.Lon = (string)ofp.Element("destination").Element("pos_long");
                     this.Alternate.Lon = (string)ofp.Element("alternate").Element("pos_long");
 
-                    this.Origin.ETE = TimeSpan.FromMinutes(30);
                     this.Destination.ETE = TimeSpan.FromSeconds((int)ofp.Element("times").Element("est_time_enroute")).Add(this.Origin.ETE);
                     this.Alternate.ETE = TimeSpan.FromSeconds((int)ofp.Element("alternate").Element("ete")).Add(this.Destination.ETE);
 
@@ -179,6 +178,12 @@
         private void AddDepartureTime()
         {
             this.Origin.ETE = this.Origin.ETE.Add(TimeSpan.FromMinutes(5));
+
+            if (this.Destination.ETE != TimeSpan.Zero && this.Alternate.ETE != TimeSpan.Zero)
+            {
+                this.Destination.ETE = this.Destination.ETE.Add(TimeSpan.FromMinutes(5));
+                this.Alternate.ETE = this.Alternate.ETE.Add(TimeSpan.FromMinutes(5));
+            }
         }
 
         private void RemoveDepartureTime()
@@ -186,9 +191,19 @@
             if (this.Origin.ETE.TotalMinutes > 5)
             {
                 this.Origin.ETE = this.Origin.ETE.Subtract(TimeSpan.FromMinutes(5));
+                if (this.Destination.ETE != TimeSpan.Zero && this.Alternate.ETE != TimeSpan.Zero)
+                {
+                    this.Destination.ETE = this.Destination.ETE.Subtract(TimeSpan.FromMinutes(5));
+                    this.Alternate.ETE = this.Alternate.ETE.Subtract(TimeSpan.FromMinutes(5));
+                }
             }
             else
             {
+                if (this.Destination.ETE != TimeSpan.Zero && this.Alternate.ETE != TimeSpan.Zero)
+                {
+                    this.Destination.ETE = this.Destination.ETE.Subtract(TimeSpan.FromMinutes(this.Origin.ETE.TotalMinutes));
+                    this.Alternate.ETE = this.Alternate.ETE.Subtract(TimeSpan.FromMinutes(this.Origin.ETE.TotalMinutes));
+                }
                 this.Origin.ETE = TimeSpan.Zero;
             }
         }
