@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Product Id="*" Name="SunsetOffsetCalculator" Language="1033" Version="!(bind.FileVersion.SunsetOffsetCalculatorExeFile)" Manufacturer="sushi.at" UpgradeCode="0c262bd5-dfcf-49a2-b35f-7605ff0606f0">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
+    <Icon Id="sun.ico" SourceFile="..\SunsetOffsetCalculator\Resources\sun.ico" />
+    <Property Id="ARPPRODUCTICON" Value="sun.ico" />
+
+    <PropertyRef Id="WIX_EXT_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED" />
+    <Condition Message="This application requires .NET Framework 4.8.0. Please install the .NET Framework then run this installer again.">
+      Installed OR WIX_EXT_IS_NETFRAMEWORK_48_OR_LATER_INSTALLED
+    </Condition>
+    
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="SunsetOffsetCalculator" Level="1">
+			<ComponentGroupRef Id="SunsetOffsetCalculator" />
+		</Feature>
+
+    <util:CloseApplication Id="CloseSunsetOffsetCalculator" Target="SunsetOffsetCalculator.exe" TerminateProcess="1" RebootPrompt="no" PromptToContinue="no" />
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFiles64Folder">
+				<Directory Id="INSTALLFOLDER" Name="SunsetOffsetCalculator" />
+			</Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="SunsetOffsetCalculator"/>
+      </Directory>
+      <Directory Id="DesktopFolder" SourceName="Desktop" />
+    </Directory>
+  </Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="SunsetOffsetCalculator" Directory="INSTALLFOLDER">
+      <Component Guid="{8F39258C-5CD1-4765-A04C-86064874462A}" Win64="yes">
+        <File Source="..\SunsetOffsetCalculator\bin\Release\SunsetOffsetCalculator.exe" KeyPath="yes" Id="SunsetOffsetCalculatorExeFile">
+          <Shortcut Id="SunsetOffsetCalculator.Shortcut" Directory="ApplicationProgramsFolder" WorkingDirectory="INSTALLFOLDER" Name="Sunset Offset Calculator" Icon="sun.ico" Advertise="yes" />
+          <Shortcut Id="SunsetOffsetCalculator.DeskShortcut" Directory="DesktopFolder" WorkingDirectory="INSTALLFOLDER" Name="Sunset Offset Calculator" Icon="sun.ico" Advertise="yes" />
+        </File>
+        <RemoveFolder Id="RemoveProgramMenuDir" Directory="ApplicationProgramsFolder" On="uninstall" />
+      </Component>
+      <Component Guid="{BB08CBA7-ACE7-4F89-80FB-7FAFD4F5D4CB}" Win64="yes">
+        <File Source="..\SunsetOffsetCalculator\bin\Release\SunsetOffsetCalculator.exe.config" KeyPath="yes" />
+      </Component>
+      <Component Guid="{4F6BE054-755E-470C-ABE3-378773CB2CBB}" Win64="yes">
+        <File Source="..\SunsetOffsetCalculator\bin\Release\Newtonsoft.Json.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{F47E7FEF-910B-469D-84FD-10BCDB3BFC6A}" Win64="yes">
+        <File Source="..\SunsetOffsetCalculator\bin\Release\WPFWaterMarkTextBox.dll" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>
