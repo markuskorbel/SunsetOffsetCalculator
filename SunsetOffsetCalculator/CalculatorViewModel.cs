@@ -310,7 +310,7 @@
                         var sunsetOffset = -13;
                         for (int i = -12; i <= 12; i++)
                         {
-                            var srDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).AddHours(i) - airport.Sunrise.Value.Add(airport.ETE);
+                            var srDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).Add(airport.ETE).AddHours(i) - airport.Sunrise.Value;
                             if (srDelta.TotalSeconds < 0)
                             {
                                 srDelta = srDelta.Negate();
@@ -332,7 +332,7 @@
                                 sunriseOffset = i;
                             }
 
-                            var ssDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).AddHours(i) - airport.Sunset.Value.Add(airport.ETE);
+                            var ssDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).Add(airport.ETE).AddHours(i) - airport.Sunset.Value;
                             if (ssDelta.TotalSeconds < 0)
                             {
                                 ssDelta = ssDelta.Negate();
