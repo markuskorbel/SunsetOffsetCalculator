@@ -10,3 +10,4 @@ Once you have the coordinates click the next right arrow button to look up the s
 Remember to also provide reasonable time enroute times if you want to arrive at sunset/sunrise at your destination.
 
 The last step is to simply look at the suggested UTC time offset to use for your simulator/career mode application. The time delta to sunrise/sunset is displayed next to the hour offset so you can fine-tune.
+If the delta is counting down the sunset/sunrise will occur a few minutes after takeoff/landing, counting upwards it will occur a few minutes before.
