@@ -338,6 +338,16 @@
                                 ssDelta = ssDelta.Negate();
                             }
 
+                            if (ssDelta.TotalHours > 23)
+                            {
+                                ssDelta = ssDelta.Subtract(TimeSpan.FromDays(1));
+                            }
+
+                            if (ssDelta.TotalSeconds < 0)
+                            {
+                                ssDelta = ssDelta.Negate();
+                            }
+
                             if (ssDelta < minSunSet)
                             {
                                 minSunSet = ssDelta;
