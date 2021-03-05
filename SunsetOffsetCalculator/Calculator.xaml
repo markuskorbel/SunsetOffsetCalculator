@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SunsetOffsetCalculator" xmlns:wpfwatermarktextbox="clr-namespace:WPFWaterMarkTextBox;assembly=WPFWaterMarkTextBox"
         mc:Ignorable="d"
-        Title="Sunrise and Sunset UTC-Offset Calculator" Height="359.587" Width="810.105">
+        Title="Sunrise and Sunset UTC-Offset Calculator" Height="386.165" Width="810.105">
     <Window.DataContext>
         <local:CalculatorViewModel />
     </Window.DataContext>
@@ -27,12 +27,14 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">My local time zone</TextBlock>
                 <TextBlock Grid.Row="1" Grid.Column="0"  VerticalAlignment="Center">Current time</TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="0"  VerticalAlignment="Center">Planned takeoff time</TextBlock>
                 <TextBlock Grid.Row="3" Grid.Column="0"  VerticalAlignment="Center">Import from Simbrief</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Help me choose</TextBlock>
 
                 <ComboBox Grid.Row="0" Grid.Column="1" Margin="5,2,0,2" ItemsSource="{Binding TimeZones}" SelectedItem="{Binding SelectedTimeZone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="5,2,0,2">
@@ -54,6 +56,19 @@
                 <Button Grid.Row="3" Grid.Column="2" Command="{Binding ImportSimBriefCommand}" Margin="5,2,0,2" VerticalAlignment="Center">
                     <Image Source="/Resources/down.png" Width="16" Height="16" />
                 </Button>
+                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
+                    <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">I want to</TextBlock>
+                    <ComboBox Margin="5,0" SelectedItem="{Binding HelpMeAirport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBoxItem IsSelected="True">take off from the origin airport</ComboBoxItem>
+                        <ComboBoxItem>land at the destination airport</ComboBoxItem>
+                        <ComboBoxItem>land at the alternate airport</ComboBoxItem>
+                    </ComboBox>
+                    <TextBlock VerticalAlignment="Center">during</TextBlock>
+                    <ComboBox Margin="5,0" SelectedItem="{Binding HelpMeSunsetSunrise, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBoxItem IsSelected="True">sunrise</ComboBoxItem>
+                        <ComboBoxItem>sunset</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
             </Grid>
         </GroupBox>
         <GroupBox Header="Flight information" Grid.Row="1">
@@ -132,17 +147,17 @@
                 <TextBox Grid.Row="2" Grid.Column="7" Text="{Binding Destination.Sunrise, Mode=OneWay, StringFormat=HH:mm}" FontSize="13" FontWeight="Medium" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
                 <TextBox Grid.Row="3" Grid.Column="7" Text="{Binding Alternate.Sunrise, Mode=OneWay, StringFormat=HH:mm}" FontSize="13" FontWeight="Medium" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
 
-                <TextBox Grid.Row="1" Grid.Column="8" Text="{Binding Origin.Sunset, Mode=OneWay, StringFormat=HH:mm}" FontSize="13" FontWeight="Medium" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
+                <TextBox Grid.Row="1" Grid.Column="8" Text="{Binding Origin.Sunset, Mode=OneWay, StringFormat=HH:mm}" FontSize="13" FontWeight="Medium" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center"  />
                 <TextBox Grid.Row="2" Grid.Column="8" Text="{Binding Destination.Sunset, Mode=OneWay, StringFormat=HH:mm}" FontSize="13" FontWeight="Medium" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
                 <TextBox Grid.Row="3" Grid.Column="8" Text="{Binding Alternate.Sunset, Mode=OneWay, StringFormat=HH:mm}" FontSize="13" FontWeight="Medium" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
 
-                <TextBox Grid.Row="1" Grid.Column="9" Text="{Binding Origin.SunriseOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
-                <TextBox Grid.Row="2" Grid.Column="9" Text="{Binding Destination.SunriseOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
-                <TextBox Grid.Row="3" Grid.Column="9" Text="{Binding Alternate.SunriseOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
+                <TextBox Grid.Row="1" Grid.Column="9" Text="{Binding Origin.SunriseOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" BorderBrush="{Binding HelpMeBorders.OriginSunrise}" BorderThickness="{Binding HelpMeBorders.OriginSunriseThickness}" />
+                <TextBox Grid.Row="2" Grid.Column="9" Text="{Binding Destination.SunriseOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" BorderBrush="{Binding HelpMeBorders.DestinationSunrise}" BorderThickness="{Binding HelpMeBorders.DestinationSunriseThickness}" />
+                <TextBox Grid.Row="3" Grid.Column="9" Text="{Binding Alternate.SunriseOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" BorderBrush="{Binding HelpMeBorders.AlternateSunrise}" BorderThickness="{Binding HelpMeBorders.AlternateSunriseThickness}" />
 
-                <TextBox Grid.Row="1" Grid.Column="10" Text="{Binding Origin.SunsetOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
-                <TextBox Grid.Row="2" Grid.Column="10" Text="{Binding Destination.SunsetOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
-                <TextBox Grid.Row="3" Grid.Column="10" Text="{Binding Alternate.SunsetOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" />
+                <TextBox Grid.Row="1" Grid.Column="10" Text="{Binding Origin.SunsetOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" BorderBrush="{Binding HelpMeBorders.OriginSunset}" BorderThickness="{Binding HelpMeBorders.OriginSunsetThickness}" />
+                <TextBox Grid.Row="2" Grid.Column="10" Text="{Binding Destination.SunsetOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" BorderBrush="{Binding HelpMeBorders.DestinationSunset}" BorderThickness="{Binding HelpMeBorders.DestinationSunsetThickness}" />
+                <TextBox Grid.Row="3" Grid.Column="10" Text="{Binding Alternate.SunsetOffset, Mode=OneWay}" FontSize="16" FontWeight="Bold" IsReadOnly="True" MinWidth="40" Margin="5,2,0,2" VerticalContentAlignment="Center" BorderBrush="{Binding HelpMeBorders.AlternateSunset}" BorderThickness="{Binding HelpMeBorders.AlternateSunsetThickness}" />
             </Grid>
         </GroupBox>
         <TextBlock Grid.Row="2" FontWeight="Light">
