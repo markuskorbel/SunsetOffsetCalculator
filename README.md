@@ -1,5 +1,5 @@
 # SunsetOffsetCalculator
-Sunrise and Sunset UTC-Offset Calculator for all your flight simming needs so you can always take off or land at sunset or sunrise for those magic screenshots.
+Sunrise and Sunset UTC-Offset Calculator for all your flight simming needs so you can always take off or land at sunset or sunrise for those magic screenshots. Designed to be used with career addons like OnAir that only allow you to set an UTC offset but don't allow you to change the time freely in the simulator.
 
 ![Screenshot](/screenshot.png?raw=true "Screenshot")
 
@@ -10,3 +10,4 @@ Once you have the coordinates click the next right arrow button to look up the s
 Remember to also provide reasonable time enroute times if you want to arrive at sunset/sunrise at your destination.
 
 The last step is to simply look at the suggested UTC time offset to use for your simulator/career mode application. The time delta to sunrise/sunset is displayed next to the hour offset so you can fine-tune.
+If the delta is counting down the sunset/sunrise will occur a few minutes after takeoff/landing, counting upwards it will occur a few minutes before.

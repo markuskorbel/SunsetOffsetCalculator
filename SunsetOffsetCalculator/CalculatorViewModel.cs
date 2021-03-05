@@ -7,10 +7,10 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
-    using System.Linq;
     using System.Net;
     using System.Threading;
     using System.Windows;
+    using System.Windows.Media;
     using System.Xml.Linq;
 
     public class CalculatorViewModel : ViewModel
@@ -23,6 +23,10 @@
 
         private string utcTime;
 
+        private string helpMeSunsetSunrise;
+
+        private string helpMeAirport;
+
         public CalculatorViewModel()
         {
             // Init data structures
@@ -31,6 +35,7 @@
             this.Origin = new Airport { ETE = TimeSpan.FromMinutes(30) };
             this.Destination = new Airport();
             this.Alternate = new Airport();
+            this.HelpMeBorders = new HelpMeBorders();
 
             // Init commands
             this.ImportSimBriefCommand = new AsynchronousCommand(this.ImportSimBrief, false);
@@ -53,6 +58,8 @@
         public Airport Destination { get; }
 
         public Airport Alternate { get; }
+
+        public HelpMeBorders HelpMeBorders { get; }
 
         public TimeZoneInfo SelectedTimeZone
         {
@@ -116,6 +123,40 @@
 
                 this.utcTime = value;
                 this.NotifyPropertyChanged();
+            }
+        }
+
+        public string HelpMeSunsetSunrise
+        {
+            get => this.helpMeSunsetSunrise;
+
+            set
+            {
+                if (Equals(this.helpMeSunsetSunrise, value))
+                {
+                    return;
+                }
+
+                this.helpMeSunsetSunrise = value;
+                this.NotifyPropertyChanged();
+                this.HelpMe();
+            }
+        }
+
+        public string HelpMeAirport
+        {
+            get => this.helpMeAirport;
+
+            set
+            {
+                if (Equals(this.helpMeAirport, value))
+                {
+                    return;
+                }
+
+                this.helpMeAirport = value;
+                this.NotifyPropertyChanged();
+                this.HelpMe();
             }
         }
 
@@ -310,7 +351,7 @@
                         var sunsetOffset = -13;
                         for (int i = -12; i <= 12; i++)
                         {
-                            var srDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).AddHours(i) - airport.Sunrise.Value.Add(airport.ETE);
+                            var srDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).Add(airport.ETE).AddHours(i) - airport.Sunrise.Value;
                             if (srDelta.TotalSeconds < 0)
                             {
                                 srDelta = srDelta.Negate();
@@ -332,7 +373,7 @@
                                 sunriseOffset = i;
                             }
 
-                            var ssDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).AddHours(i) - airport.Sunset.Value.Add(airport.ETE);
+                            var ssDelta = DateTime.UtcNow.Add(this.SelectedTimeZone.GetUtcOffset(DateTime.Now)).Add(airport.ETE).AddHours(i) - airport.Sunset.Value;
                             if (ssDelta.TotalSeconds < 0)
                             {
                                 ssDelta = ssDelta.Negate();
@@ -370,6 +411,49 @@
                 }
 
                 Thread.Sleep(1000);
+            }
+        }
+
+        private void HelpMe()
+        {
+            Debug.WriteLine($"Selected sunset/sunrise: {this.HelpMeSunsetSunrise}");
+            this.HelpMeBorders.Reset();
+
+            if (this.HelpMeSunsetSunrise?.ToLower().Contains("sunrise") == true)
+            {
+                if (this.HelpMeAirport?.ToLower().Contains("origin") == true)
+                {
+                    this.HelpMeBorders.OriginSunrise = new SolidColorBrush(Colors.Green);
+                    this.HelpMeBorders.OriginSunriseThickness = new Thickness(5);
+                }
+                if (this.HelpMeAirport?.ToLower().Contains("destination") == true)
+                {
+                    this.HelpMeBorders.DestinationSunrise = new SolidColorBrush(Colors.Green);
+                    this.HelpMeBorders.DestinationSunriseThickness = new Thickness(5);
+                }
+                if (this.HelpMeAirport?.ToLower().Contains("alternate") == true)
+                {
+                    this.HelpMeBorders.AlternateSunrise = new SolidColorBrush(Colors.Green);
+                    this.HelpMeBorders.AlternateSunriseThickness = new Thickness(5);
+                }
+            }
+            else
+            {
+                if (this.HelpMeAirport?.ToLower().Contains("origin") == true)
+                {
+                    this.HelpMeBorders.OriginSunset = new SolidColorBrush(Colors.Green);
+                    this.HelpMeBorders.OriginSunsetThickness = new Thickness(5);
+                }
+                if (this.HelpMeAirport?.ToLower().Contains("destination") == true)
+                {
+                    this.HelpMeBorders.DestinationSunset = new SolidColorBrush(Colors.Green);
+                    this.HelpMeBorders.DestinationSunsetThickness = new Thickness(5);
+                }
+                if (this.HelpMeAirport?.ToLower().Contains("alternate") == true)
+                {
+                    this.HelpMeBorders.AlternateSunset = new SolidColorBrush(Colors.Green);
+                    this.HelpMeBorders.AlternateSunsetThickness = new Thickness(5);
+                }
             }
         }
     }

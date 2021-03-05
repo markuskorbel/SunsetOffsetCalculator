@@ -66,6 +66,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Airport.cs" />
+    <Compile Include="HelpMeBorders.cs" />
     <Compile Include="MVVM\AsynchronousCommand.cs" />
     <Compile Include="MVVM\CancelCommandEventArgs.cs" />
     <Compile Include="MVVM\Command.cs" />
